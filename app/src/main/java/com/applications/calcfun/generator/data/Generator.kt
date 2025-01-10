@@ -1,9 +1,11 @@
 package com.applications.calcfun.generator.data
 
-class Generator {
+import com.applications.calcfun.generator.domain.api.GeneratorRepository
+
+class Generator : GeneratorRepository {
     private fun createNumber(min: Int, max: Int) = (min..max).random()
     private fun createOperation() = Operation.entries.shuffled().first()
-    fun createExpression(): Expression {
+    override fun createExpression(): Expression {
         val first = createNumber(1, 100)
         var second = createNumber(0, 100)
         return when (createOperation()) {
