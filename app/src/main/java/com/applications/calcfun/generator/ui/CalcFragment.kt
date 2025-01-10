@@ -1,7 +1,6 @@
 package com.applications.calcfun.generator.ui
 
 import android.os.Bundle
-import android.os.Handler
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +9,11 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.applications.calcfun.databinding.FragmentCalcBinding
 import com.applications.calcfun.generator.presentation.CalcViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CalcFragment : Fragment() {
@@ -40,11 +42,11 @@ class CalcFragment : Fragment() {
         val ic = editText.onCreateInputConnection(EditorInfo())
         keyboard.setInputConnection(ic)
         var inputText: String? = null
+        var progressStatus = 0
         editText.addTextChangedListener(
             beforeTextChanged = { s, start, count, after -> },
             onTextChanged = { s, start, before, count -> },
             afterTextChanged = { s -> inputText = s.toString() })
-        var isRunnable = false
         keyboard.mButtonEnter?.setOnClickListener {
             if (checkExpression(createdExpression.result, inputText)) {
                 Toast.makeText(requireContext(), "Right", Toast.LENGTH_SHORT).show()
@@ -54,19 +56,15 @@ class CalcFragment : Fragment() {
             createdExpression = createNewExpression()
             binding.textViewStringCalc.text = createdExpression.expression
             editText.text.clear()
-            isRunnable = true
+            progressStatus = 0
         }
-        var progressStatus = 0
-        var handler = Handler()
-        Thread(Runnable {
-            while (progressStatus < 100 && !isRunnable) {
-                progressStatus += 1
-                Thread.sleep(100)
-                handler.post {
-                    binding.progressBar.progress = progressStatus
-                }
+        viewLifecycleOwner.lifecycleScope.launch {
+            while (progressStatus < 100) {
+                delay(100)
+                binding.progressBar.progress = progressStatus
+                progressStatus++
             }
-        }).start()
+        }
     }
 
     private fun createNewExpression() =

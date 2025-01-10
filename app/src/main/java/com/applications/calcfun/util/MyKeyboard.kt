@@ -11,14 +11,12 @@ import android.widget.Button
 import android.widget.LinearLayout
 import com.applications.calcfun.R
 
-
 class MyKeyboard @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) :
     LinearLayout(context, attrs, defStyleAttr), View.OnClickListener {
-    // keyboard keys (buttons)
     private var mButton1: Button? = null
     private var mButton2: Button? = null
     private var mButton3: Button? = null
@@ -32,21 +30,15 @@ class MyKeyboard @JvmOverloads constructor(
     private var mButtonDelete: Button? = null
     var mButtonEnter: Button? = null
 
-    // This will map the button resource id to the String value that we want to
-    // input when that button is clicked.
     private var keyValues: SparseArray<String> = SparseArray()
 
-    // Our communication link to the EditText
     private var inputConnection: InputConnection? = null
 
-    // constructors
     init {
         init(context)
     }
 
     private fun init(context: Context) {
-        // initialize buttons
-
         LayoutInflater.from(context).inflate(R.layout.keyboard, this, true)
         mButton1 = findViewById<View>(R.id.button_1) as Button
         mButton2 = findViewById<View>(R.id.button_2) as Button
@@ -61,7 +53,6 @@ class MyKeyboard @JvmOverloads constructor(
         mButtonDelete = findViewById<View>(R.id.button_delete) as Button
         mButtonEnter = findViewById<View>(R.id.button_enter) as Button
 
-        // set button click listeners
         mButton1!!.setOnClickListener(this)
         mButton2!!.setOnClickListener(this)
         mButton3!!.setOnClickListener(this)
@@ -75,7 +66,6 @@ class MyKeyboard @JvmOverloads constructor(
         mButtonDelete!!.setOnClickListener(this)
         mButtonEnter!!.setOnClickListener(this)
 
-        // map buttons IDs to input strings
         keyValues.put(R.id.button_1, "1")
         keyValues.put(R.id.button_2, "2")
         keyValues.put(R.id.button_3, "3")
@@ -90,19 +80,12 @@ class MyKeyboard @JvmOverloads constructor(
     }
 
     override fun onClick(v: View) {
-        // do nothing if the InputConnection has not been set yet
-
         if (inputConnection == null) return
-
-        // Delete text or input key value
-        // All communication goes through the InputConnection
         if (v.id == R.id.button_delete) {
             val selectedText = inputConnection!!.getSelectedText(0)
             if (TextUtils.isEmpty(selectedText)) {
-                // no selection, so delete previous character
                 inputConnection!!.deleteSurroundingText(1, 0)
             } else {
-                // delete the selection
                 inputConnection!!.commitText("", 1)
             }
         } else {
@@ -111,8 +94,6 @@ class MyKeyboard @JvmOverloads constructor(
         }
     }
 
-    // The activity (or some parent or controller) must give us
-    // a reference to the current EditText's InputConnection
     fun setInputConnection(ic: InputConnection?) {
         this.inputConnection = ic
     }
