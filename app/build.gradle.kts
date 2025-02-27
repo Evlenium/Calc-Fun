@@ -55,4 +55,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.lifecycle.runtime)
     implementation(libs.koin.android)
+    implementation(libs.navigation.ui.ktx)
+    implementation(libs.navigation.fragment)
 }

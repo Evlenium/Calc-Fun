@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.applications.calcfun.R
 import com.applications.calcfun.databinding.FragmentCalcBinding
 import com.applications.calcfun.generator.presentation.CalcViewModel
 import kotlinx.coroutines.delay
@@ -50,6 +52,7 @@ class CalcFragment : Fragment() {
         keyboard.mButtonEnter?.setOnClickListener {
             if (checkExpression(createdExpression.result, inputText)) {
                 Toast.makeText(requireContext(), "Right", Toast.LENGTH_SHORT).show()
+                viewModel.addPoint()
             } else {
                 Toast.makeText(requireContext(), "Wrong", Toast.LENGTH_SHORT).show()
             }
@@ -58,12 +61,14 @@ class CalcFragment : Fragment() {
             editText.text.clear()
             progressStatus = 0
         }
+
         viewLifecycleOwner.lifecycleScope.launch {
             while (progressStatus < 100) {
                 delay(100)
                 binding.progressBar.progress = progressStatus
                 progressStatus++
             }
+            findNavController().navigate(R.id.action_calcFragment_to_scoreFragment)
         }
     }
 
@@ -72,6 +77,11 @@ class CalcFragment : Fragment() {
 
     private fun checkExpression(generatorText: Int, inputText: String?): Boolean {
         return inputText != null && generatorText == inputText.toInt()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 
