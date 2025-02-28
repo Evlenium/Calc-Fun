@@ -1,8 +1,7 @@
-package com.applications.calcfun.generator.ui
+package com.applications.calcfun.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.applications.calcfun.R
 import com.applications.calcfun.databinding.ActivityMainBinding
 
 
@@ -13,10 +12,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container_view, CalcFragment())
-            .addToBackStack(null)
-            .commit()
     }
 
     override fun onDestroy() {
