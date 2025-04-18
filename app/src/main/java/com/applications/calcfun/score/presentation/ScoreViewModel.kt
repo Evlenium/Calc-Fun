@@ -12,6 +12,10 @@ class ScoreViewModel(private val scoreInteractor: ScoreInteractor) : ViewModel()
         renderState(ScoreState.Score(scoreInteractor.getPoint()))
     }
 
+    fun clearScore() {
+        scoreInteractor.clearScore()
+    }
+
     private fun renderState(score: ScoreState) {
         scoreLiveData.postValue(score)
     }
