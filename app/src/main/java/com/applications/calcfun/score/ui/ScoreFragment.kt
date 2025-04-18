@@ -37,8 +37,9 @@ class ScoreFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.clearScore()
         _binding = null
     }
 }

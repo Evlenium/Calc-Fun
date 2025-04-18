@@ -10,4 +10,8 @@ class ScoreInteractorImpl(private val scoreRepository: ScoreRepository) : ScoreI
 
     override fun getPoint() =
         scoreRepository.getPoint()
+
+    override fun clearScore() {
+        scoreRepository.clearScore()
+    }
 }
